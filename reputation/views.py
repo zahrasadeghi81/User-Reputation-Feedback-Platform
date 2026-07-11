@@ -179,6 +179,10 @@ def feedback_create_view(request):
     if to_user == request.user:
         return error("You cannot leave feedback for yourself")
 
+    today = timezone.localdate()
+    if Feedback.objects.filter(from_user=request.user, to_user=to_user, created_at__date=today).exists():
+        return error("You can only vote for a user once per day")
+
     item = Feedback.objects.create(from_user=request.user, to_user=to_user, score=score, comment=comment)
     return JsonResponse({"feedback": serialize_feedback(item, include_to=True), "user": serialize_user(to_user)}, status=201)
 
