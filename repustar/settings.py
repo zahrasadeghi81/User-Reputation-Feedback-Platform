@@ -6,6 +6,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DJANGO_SECRET_KEY", "django-insecure-local-dev-repustar")
 DEBUG = os.environ.get("DJANGO_DEBUG", "True") == "True"
 ALLOWED_HOSTS = os.environ.get("DJANGO_ALLOWED_HOSTS", "localhost,127.0.0.1,testserver").split(",")
+if os.environ.get("RENDER"):
+    ALLOWED_HOSTS.append(os.environ.get("RENDER_EXTERNAL_URL", "").replace("https://", ""))
+    ALLOWED_HOSTS.append("0.0.0.0")
 
 INSTALLED_APPS = [
     "django.contrib.admin",
